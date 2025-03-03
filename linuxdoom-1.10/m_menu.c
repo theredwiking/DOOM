@@ -22,9 +22,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
-
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -511,7 +508,6 @@ menu_t  SaveDef =
 void M_ReadSaveStrings(void)
 {
     int             handle;
-    int             count;
     int             i;
     char    name[256];
 	
@@ -529,7 +525,7 @@ void M_ReadSaveStrings(void)
 	    LoadMenu[i].status = 0;
 	    continue;
 	}
-	count = read (handle, &savegamestrings[i], SAVESTRINGSIZE);
+	(void) read (handle, &savegamestrings[i], SAVESTRINGSIZE);
 	close (handle);
 	LoadMenu[i].status = 1;
     }
