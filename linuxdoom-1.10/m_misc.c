@@ -54,6 +54,9 @@
 // Data.
 #include "dstrings.h"
 
+// Language
+#include "d_englsh.h"
+
 #include "m_misc.h"
 
 //
@@ -389,7 +392,7 @@ void M_LoadDefaults (void)
 			    *defaults[i].location = parm;
 			else
 			    *defaults[i].location =
-				(int) newstring;
+				(intptr_t) newstring;
 			break;
 		    }
 	    }

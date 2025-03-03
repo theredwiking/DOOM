@@ -20,6 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -211,7 +212,7 @@ char		savedescription[32];
 mobj_t*		bodyque[BODYQUESIZE]; 
 int		bodyqueslot; 
  
-int		statcopy;				// for statistics driver
+//uint64_t		statcopy;				// for statistics driver
  
  
  
@@ -1134,8 +1135,8 @@ void G_DoCompleted (void)
     viewactive = false; 
     automapactive = false; 
  
-    if (statcopy)
-	memcpy (&statcopy, &wminfo, sizeof(wminfo));
+    //if (statcopy)
+	//memcpy (&statcopy, &wminfo, sizeof(wminfo));
 	
     WI_Start (&wminfo); 
 } 
