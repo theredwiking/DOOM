@@ -23,7 +23,6 @@
 #ifndef __M_SWAP__
 #define __M_SWAP__
 
-
 #ifdef __GNUG__
 #pragma interface
 #endif

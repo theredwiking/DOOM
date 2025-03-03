@@ -1,0 +1,209 @@
+Okay, let's break down this error and how to resolve it. The key problem is the missing errnos.h header file. The other warnings are less critical but should be addressed if possible.
+
+1. The Core Issue: Missing errnos.h
+
+The compiler is telling you it can't find the errnos.h file:
+
+      
+i_video.c:49:10: fatal error: errnos.h: No such file or directory
+   49 | #include <errnos.h>
+      |          ^~~~~~~~~~
+
+    
+
+Use code with caution.
+
+This header is a Unix-like header that typically contains definitions for error codes. However, it's not a standard, universally available header. It might have been specific to an older system or a particular distribution.
+
+Solution:
+
+The best approach is to remove the #include <errnos.h> line from i_video.c. Then replace any references in i_video.c to defines it would have contained with alternatives. Look through the contents of i_video.c to find how the missing #include is used, and then replace uses of missing identifiers like EWOULDBLOCK (a common candidate) with other equivalent symbols that are available on your system.
+
+Here's how to find the uses and deal with them, in summary:
+
+    Open i_video.c: Use a text editor to open this file.
+
+    Search for errnos.h Usage: Look for instances of the errno error codes. Some common ones you might find are:
+
+        EWOULDBLOCK (or EAGAIN)
+
+        EINTR
+
+        EINVAL
+
+        EBUSY
+
+    Replace Error Codes: The goal is to use error codes that are standard on your system.
+
+        EWOULDBLOCK / EAGAIN: These are often interchangeable and indicate that an operation would block (wait) but was configured to be non-blocking. On most modern systems, you can just use EAGAIN.
+
+        EINTR: This means that a system call was interrupted by a signal. This doesn't generally need to be replaced but should be kept if its used, as its use implies handling of signals.
+
+        EINVAL: Invalid argument.
+
+        EBUSY: Resource busy.
+
+        These are likely already defined in <errno.h>, which is a standard header. Make sure <errno.h> is included in i_video.c. You probably already have this include, given the context of the error. The top of i_video.c should look something like this:
+
+              
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <string.h>
+        #include <unistd.h>
+        #include <fcntl.h>
+        #include <sys/time.h>
+        #include <sys/types.h>
+        #include <sys/socket.h>
+        #include <netinet/in.h>
+        #include <arpa/inet.h>
+        #include <errno.h> // Make sure this is here
+
+            
+
+    Use code with caution.C
+
+    Replace any uses of EWOULDBLOCK with EAGAIN if EAGAIN is defined after including <errno.h>. If EAGAIN isn't defined, leave it as EWOULDBLOCK.
+
+Example:
+
+Let's say you have this in i_video.c:
+
+      
+if (some_function() == -1 && errno == EWOULDBLOCK) {
+    // Handle the would-block condition
+}
+
+    
+
+Use code with caution.C
+
+You would change it to (assuming you've included <errno.h>):
+
+      
+#include <errno.h>
+
+if (some_function() == -1 && errno == EAGAIN) {
+    // Handle the would-block condition
+}
+
+    
+
+Use code with caution.C
+
+Or, if EAGAIN is NOT defined by your system header:
+
+      
+```c
+#include <errno.h>
+
+if (some_function() == -1 && errno == EWOULDBLOCK) {
+    // Handle the would-block condition
+}
+```
+
+    
+
+    Use code with caution.
+
+2. Other Warnings (Address these after fixing the errnos.h issue):
+
+These warnings suggest potential problems, especially related to pointer size and signedness, and const correctness, in a 64-bit environment.
+
+    Pointer-to-Integer Casts:
+
+          
+    d_net.c:92:12: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    d_net.c:110:29: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    m_misc.c:257:48: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+
+        
+
+Use code with caution.
+
+These are very common when converting older C code to 64-bit. Pointers are now 64 bits (8 bytes), while int is often still 32 bits (4 bytes). Casting a pointer to an int truncates the pointer value, leading to incorrect results.
+
+    Solution: In d_net.c, consider changing the return type of NetbufferSize to size_t or long. Then change the cast to (size_t). In m_misc.c, the casts are used in initializers for the defaults array, and the elements where the cast are used are actually pointers. The correct type for the defaultvalue field in the defoult_t struct is void* not int*, so change that. Then you can cast the defaultvalue to void*.
+
+initializer element is not constant (in m_misc.c)
+
+This error occurs because you're trying to use a non-constant expression as the initial value of a const variable. The usual culprit is trying to initialize a const char* with a string literal without declaring it static.
+
+    Solution:
+
+          
+    static char *sndserver_filename = "sndserver"; // Example
+
+        
+
+Use code with caution.C
+
+Then, the initialization:
+
+      
+{"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
+
+    
+
+Use code with caution.C
+
+Will become:
+
+      
+{"sndserver", (void*) &sndserver_filename, (void*) sndserver_filename },
+
+    
+
+    Use code with caution.C
+
+    The other cases in m_misc.c can be handled in similar ways.
+    The cast to (int) should be removed, and instead the defaultvalue of the defoult_t struct should be changed from int* to void*.
+
+operation on ‘eventtail’ may be undefined [-Wsequence-point] (in d_net.c)
+
+This warning indicates that the order of operations in eventtail = (++eventtail)&(MAXEVENTS-1) is ambiguous and might lead to unexpected behavior.
+
+    Solution: Break it down into two separate statements:
+
+          
+    ++eventtail;
+    eventtail &= (MAXEVENTS - 1);
+
+        
+
+        Use code with caution.C
+
+    -Wsizeof-pointer-memaccess (in g_game.c)
+
+    This means you're using sizeof on a pointer instead of the actual array that the pointer points to.
+
+        Solution: If mousebuttons and joybuttons are declared as arrays (e.g., byte mousebuttons[10];), then the sizeof is correct. If they are pointers, you will need to either pass the correct size as a parameter, or get the size of them using sizeof(array)/sizeof(array[0]);
+
+    -Wenum-compare (in g_game.c)
+
+    This warning means you are comparing an enum with a value of a different type.
+
+        Solution: The compiler can't find the definition for pack_tnt and pack_plut. If the programmer intends to use the enum values tnt and plut, change the code to compare against those values, or alternatively, the definitions for pack_tnt and pack_plut are missing, and add the definitions for these.
+
+    -Wpointer-sign (in g_game.c)
+
+    This means you are passing a unsigned char * (aka byte *) as an argument where a const char * is expected.
+
+        Solution: Cast save_p to (const char*)save_p
+
+    -Wmisleading-indentation (in g_game.c)
+
+    This is just telling you your indentation is inconsistent with the actual conditional logic. Fix the indentation.
+
+    rcsid defined but not used.
+
+    Remove the rcsid definitions.
+
+Steps to Compile After Fixing Errors:
+
+    Edit the Files: Make the necessary changes to i_video.c, d_net.c, m_misc.c, and g_game.c using a text editor.
+
+    Clean: make clean
+
+    Compile: make
+
+After addressing all the errors and warnings, the Doom source should compile successfully. Good luck!
