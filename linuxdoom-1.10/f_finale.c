@@ -21,11 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
-
 #include <ctype.h>
+#include <stdio.h>
 
 // Functions.
 #include "i_system.h"
@@ -689,8 +686,10 @@ void F_BunnyScroll (void)
 	laststage = stage;
     }
 	
-    sprintf (name,"END%i",stage);
-    V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
+	if(stage >= 9999999) {
+		snprintf(name, 10, "END%d",stage);
+		V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
+	}
 }
 
 

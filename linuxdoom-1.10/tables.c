@@ -35,21 +35,9 @@
 //    
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: tables.c,v 1.4 1997/02/03 16:47:57 b1 Exp $";
-
-
-
 #include "tables.h"
 
-
-
-
-int
-SlopeDiv
-( unsigned	num,
-  unsigned	den)
+int SlopeDiv( unsigned	num, unsigned den)
 {
     unsigned 	ans;
     
@@ -60,9 +48,6 @@ SlopeDiv
 
     return ans <= SLOPERANGE ? ans : SLOPERANGE;
 }
-
-
-
 
 int finetangent[4096] =
 {

@@ -34,7 +34,7 @@
 
 static const char rcsid[] = "$Id: linux.c,v 1.3 1997/01/26 07:45:01 b1 Exp $";
 
-
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -53,8 +53,6 @@ myioctl
   int*	arg )
 {   
     int		rc;
-    extern int	errno;
-    
     rc = ioctl(fd, command, arg);  
     if (rc < 0)
     {
