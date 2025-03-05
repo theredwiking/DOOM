@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -59,7 +60,7 @@
 #ifdef SNDSERV
 // Separate sound server process.
 FILE*	sndserver=0;
-char*	sndserver_filename = "./sndserver ";
+char*	sndserver_filename = "sndserver ";
 #elif SNDINTR
 
 // Update all 30 millisecs, approx. 30fps synchronized.
@@ -160,7 +161,6 @@ myioctl
   int*	arg )
 {   
     int		rc;
-    extern int	errno;
     
     rc = ioctl(fd, command, arg);  
     if (rc < 0)
@@ -742,7 +742,7 @@ I_InitSound()
 	    getenv("DOOMWADDIR"),
 	    sndserver_filename);
   else
-    sprintf(buffer, "%s", sndserver_filename);
+    sprintf(buffer, "./%s", sndserver_filename);
   
   // start sound process
   if ( !access(buffer, X_OK) )
