@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -22,9 +22,6 @@
 //	This one is the original DOOM version, preserved.
 //
 //-----------------------------------------------------------------------------
-
-static const char
-rcsid[] = "$Id: info.c,v 1.3 1997/01/26 07:45:00 b1 Exp $";
 
 // Data.
 #include "sounds.h"
@@ -4667,4 +4664,3 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	S_NULL		// raisestate
     }
 };
-

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -19,9 +19,6 @@
 // DESCRIPTION:  heads-up text and input code
 //
 //-----------------------------------------------------------------------------
-
-static const char
-rcsid[] = "$Id: hu_lib.c,v 1.3 1997/01/26 07:44:58 b1 Exp $";
 
 #include <ctype.h>
 
@@ -242,7 +239,7 @@ void HUlib_drawSText(hu_stext_t* s)
 	idx = s->cl - i;
 	if (idx < 0)
 	    idx += s->h; // handle queue of lines
-	
+
 	l = &s->l[idx];
 
 	// need a decision made here on whether to skip the draw
@@ -320,13 +317,13 @@ HUlib_keyInIText
   unsigned char ch )
 {
 
-    if (ch >= ' ' && ch <= '_') 
+    if (ch >= ' ' && ch <= '_')
   	HUlib_addCharToTextLine(&it->l, (char) ch);
-    else 
-	if (ch == KEY_BACKSPACE) 
+    else
+	if (ch == KEY_BACKSPACE)
 	    HUlib_delCharFromIText(it);
-	else 
-	    if (ch != KEY_ENTER) 
+	else
+	    if (ch != KEY_ENTER)
 		return false; // did not eat key
 
     return true; // ate the key
@@ -351,4 +348,3 @@ void HUlib_eraseIText(hu_itext_t* it)
     HUlib_eraseTextLine(&it->l);
     it->laston = *it->on;
 }
-
