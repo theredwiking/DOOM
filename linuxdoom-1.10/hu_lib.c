@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -19,9 +19,6 @@
 // DESCRIPTION:  heads-up text and input code
 //
 //-----------------------------------------------------------------------------
-
-static const char
-rcsid[] = "$Id: hu_lib.c,v 1.3 1997/01/26 07:44:58 b1 Exp $";
 
 #include <ctype.h>
 
@@ -145,8 +142,6 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     int			lh;
     int			y;
     int			yoffset;
-    static boolean	lastautomapactive = true;
-
     // Only erases when NOT in automap and the screen is reduced,
     // and the text must either need updating or refreshing
     // (because of a recent change back from the automap)
@@ -168,7 +163,7 @@ void HUlib_eraseTextLine(hu_textline_t* l)
 	}
     }
 
-    lastautomapactive = automapactive;
+    (void) automapactive;
     if (l->needsupdate) l->needsupdate--;
 
 }
@@ -242,7 +237,7 @@ void HUlib_drawSText(hu_stext_t* s)
 	idx = s->cl - i;
 	if (idx < 0)
 	    idx += s->h; // handle queue of lines
-	
+
 	l = &s->l[idx];
 
 	// need a decision made here on whether to skip the draw
@@ -320,13 +315,13 @@ HUlib_keyInIText
   unsigned char ch )
 {
 
-    if (ch >= ' ' && ch <= '_') 
+    if (ch >= ' ' && ch <= '_')
   	HUlib_addCharToTextLine(&it->l, (char) ch);
-    else 
-	if (ch == KEY_BACKSPACE) 
+    else
+	if (ch == KEY_BACKSPACE)
 	    HUlib_delCharFromIText(it);
-	else 
-	    if (ch != KEY_ENTER) 
+	else
+	    if (ch != KEY_ENTER)
 		return false; // did not eat key
 
     return true; // ate the key
@@ -351,4 +346,3 @@ void HUlib_eraseIText(hu_itext_t* it)
     HUlib_eraseTextLine(&it->l);
     it->laston = *it->on;
 }
-

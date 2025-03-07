@@ -22,6 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -525,7 +526,10 @@ void M_ReadSaveStrings(void)
 	    LoadMenu[i].status = 0;
 	    continue;
 	}
-	(void) read (handle, &savegamestrings[i], SAVESTRINGSIZE);
+	if (read (handle, &savegamestrings[i], SAVESTRINGSIZE) < 0 ) {
+			fprintf(stderr, "Failed to read M_ReadSaveStrings\n");
+			fflush(stderr);
+		}
 	close (handle);
 	LoadMenu[i].status = 1;
     }

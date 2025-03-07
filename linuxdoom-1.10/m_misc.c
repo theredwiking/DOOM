@@ -235,29 +235,29 @@ typedef struct
 
 default_t	defaults[] =
 {
-    {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&snd_SfxVolume, 8},
-    {"music_volume",&snd_MusicVolume, 8},
-    {"show_messages",&showMessages, 1},
+    {"mouse_sensitivity",&mouseSensitivity, (void*) 5},
+    {"sfx_volume",&snd_SfxVolume, (void*) 8},
+    {"music_volume",&snd_MusicVolume, (void*) 8},
+    {"show_messages",&showMessages, (void*) 1},
     
 
 #ifdef NORMALUNIX
-    {"key_right",&key_right, KEY_RIGHTARROW},
-    {"key_left",&key_left, KEY_LEFTARROW},
-    {"key_up",&key_up, KEY_UPARROW},
-    {"key_down",&key_down, KEY_DOWNARROW},
-    {"key_strafeleft",&key_strafeleft, ','},
-    {"key_straferight",&key_straferight, '.'},
+    {"key_right",&key_right, (void*) KEY_RIGHTARROW},
+    {"key_left",&key_left, (void*) KEY_LEFTARROW},
+    {"key_up",&key_up, (void*) KEY_UPARROW},
+    {"key_down",&key_down, (void*) KEY_DOWNARROW},
+    {"key_strafeleft",&key_strafeleft, (void*) ','},
+    {"key_straferight",&key_straferight, (void*) '.'},
 
-    {"key_fire",&key_fire, KEY_RCTRL},
-    {"key_use",&key_use, ' '},
-    {"key_strafe",&key_strafe, KEY_RALT},
-    {"key_speed",&key_speed, KEY_RSHIFT},
+    {"key_fire",&key_fire, (void*) KEY_RCTRL},
+    {"key_use",&key_use, (void*) ' '},
+    {"key_strafe",&key_strafe, (void*) KEY_RALT},
+    {"key_speed",&key_speed, (void*) KEY_RSHIFT},
 
 // UNIX hack, to be removed. 
 #ifdef SNDSERV
     {"sndserver", (int *) &sndserver_filename, (void*) "sndserver"},
-    {"mb_used", &mb_used, 2},
+    {"mb_used", &mb_used, (void*) 2},
 #endif
     
 #endif
@@ -267,21 +267,21 @@ default_t	defaults[] =
     {"mousetype", (int*)&mousetype, (void*)"microsoft"},
 #endif
 
-    {"use_mouse",&usemouse, 1},
-    {"mouseb_fire",&mousebfire,0},
-    {"mouseb_strafe",&mousebstrafe,1},
-    {"mouseb_forward",&mousebforward,2},
+    {"use_mouse",&usemouse, (void*) 1},
+    {"mouseb_fire",&mousebfire,(void*) 0},
+    {"mouseb_strafe",&mousebstrafe,(void*) 1},
+    {"mouseb_forward",&mousebforward,(void*) 2},
 
     {"use_joystick",&usejoystick, 0},
     {"joyb_fire",&joybfire,0},
-    {"joyb_strafe",&joybstrafe,1},
-    {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,2},
+    {"joyb_strafe",&joybstrafe,(void*) 1},
+    {"joyb_use",&joybuse,(void*) 3},
+    {"joyb_speed",&joybspeed,(void*) 2},
 
-    {"screenblocks",&screenblocks, 9},
+    {"screenblocks",&screenblocks, (void*) 9},
     {"detaillevel",&detailLevel, 0},
 
-    {"snd_channels",&numChannels, 3},
+    {"snd_channels",&numChannels, (void*) 3},
 
 
 
@@ -319,8 +319,8 @@ void M_SaveDefaults (void)
 		
     for (i=0 ; i<numdefaults ; i++)
     {
-	if (defaults[i].defaultvalue > -0xfff
-	    && defaults[i].defaultvalue < 0xfff)
+	if (defaults[i].defaultvalue > (void*) -0xfff
+	    && defaults[i].defaultvalue < (void*) 0xfff)
 	{
 	    v = *defaults[i].location;
 	    fprintf (f,"%s\t\t%i\n",defaults[i].name,v);
@@ -353,7 +353,7 @@ void M_LoadDefaults (void)
     // set everything to base values
     numdefaults = sizeof(defaults)/sizeof(defaults[0]);
     for (i=0 ; i<numdefaults ; i++)
-	*defaults[i].location = defaults[i].defaultvalue;
+	*defaults[i].location = *(int*)defaults[i].defaultvalue;
     
     // check for a custom default file
     i = M_CheckParm ("-config");

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id: wadread.c,v 1.3 1997/01/30 19:54:23 b1 Exp $
@@ -35,8 +35,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char rcsid[] = "$Id: wadread.c,v 1.3 1997/01/30 19:54:23 b1 Exp $";
-
 
 
 #include <malloc.h>
@@ -56,7 +54,7 @@ int*		sfxlengths;
 
 typedef struct wadinfo_struct
 {
-    char	identification[4];		                 
+    char	identification[4];
     int		numlumps;
     int		infotableofs;
 
@@ -81,7 +79,7 @@ typedef struct lumpinfo_struct
 
 
 
-lumpinfo_t*	lumpinfo;		                                
+lumpinfo_t*	lumpinfo;
 int		numlumps;
 
 void**		lumpcache;
@@ -140,7 +138,7 @@ void strupr (char *s)
 int filelength (int handle)
 {
     struct stat	fileinfo;
-  
+
     if (fstat (handle,&fileinfo) == -1)
 	fprintf (stderr, "Error fstating\n");
 
