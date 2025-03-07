@@ -663,7 +663,9 @@ void
 I_SubmitSound(void)
 {
   // Write it to DSP device.
-  write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
+  if(write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL) <= 0) {
+		fprintf(stderr, "Failed to submit sound\n");
+	}
 }
 
 
@@ -921,7 +923,10 @@ void I_HandleSoundTimer( int ignore )
   {
     // See I_SubmitSound().
     // Write it to DSP device.
-    write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
+    if (write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL) < 0 ) {
+			fprintf(stderr, "Failed to write in I_HandleSoundTimer");
+				fflush(stderr);
+		}
 
     // Reset flag counter.
     flag = 0;
