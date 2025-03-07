@@ -142,8 +142,6 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     int			lh;
     int			y;
     int			yoffset;
-    static boolean	lastautomapactive = true;
-
     // Only erases when NOT in automap and the screen is reduced,
     // and the text must either need updating or refreshing
     // (because of a recent change back from the automap)
@@ -165,7 +163,7 @@ void HUlib_eraseTextLine(hu_textline_t* l)
 	}
     }
 
-    lastautomapactive = automapactive;
+    (void) automapactive;
     if (l->needsupdate) l->needsupdate--;
 
 }
